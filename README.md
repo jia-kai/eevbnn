@@ -75,12 +75,13 @@ python -m eevbnn eval_bin -e 0.08 output-0527/mnist-mlp/last.pth  --sat rounding
 To reproduce the results in the paper:
 
 1. Run `./train_all_parallel.sh workdir` to train all the models. The script
-   assumes two GPUs and uses six processes for parallel training, and you may
-   want to modify the `GPU_LIST` and `JOBS` variables. The training tasks are
-   described in [train_all_task.txt](train_all_task.txt).
+   assumes the workstation configuration reported in the paper, which uses two
+   GPUs and six parallel processes for training. You may want to modify the
+   `GPU_LIST` and `JOBS` variables. The training tasks are described in
+   [train_all_task.txt](train_all_task.txt).
 2. Run `./eval_all_parallel.sh workdir` to verify all the models. This script
-   assumes the workstation configuration reported in the paper, and you may need
-   to modify some variables. The verification tasks are descibed in
+   also assumes the workstation configuration reported in the paper, and you may
+   need to modify the variables. The verification tasks are described in
    [eval_all_task.txt](eval_all_task.txt).
 3. Run `./attack_all_parallel.sh workdir` run the PGD attack.
 4. Run `./gen_paper_fig.py workdir workdir/fig` to generate the figures, tables,
