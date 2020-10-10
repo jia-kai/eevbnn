@@ -50,10 +50,13 @@ make -j$(nproc)
 popd
 ```
 
-If you'd like to run the RoundingSat benchmarks, please also build RoundingSat.
-Download [soplex-5.0.1.tgz](https://soplex.zib.de/download.php?fname=soplex-5.0.1.tgz)
-and place it at `eevbnn/roundingsat_repo`, and then execute
-`./eevbnn/roundingsat_build.sh`.
+Dependencies needed to run the benchmarks of baseline methods for comparison:
+
+1. To run the Z3 benchmarks, install Z3 by `pip install z3-solver`.
+2. To run the RoundingSat benchmarks, download
+   [soplex-5.0.1.tgz](https://soplex.zib.de/download.php?fname=soplex-5.0.1.tgz)
+   and place it at `eevbnn/roundingsat_repo`, and then execute
+   `./eevbnn/roundingsat_build.sh`.
 
 ## Usage
 
