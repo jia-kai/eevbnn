@@ -1,0 +1,29 @@
+# -*- coding: utf-8 -*-
+
+from distutils.extension import Extension
+import subprocess
+from pathlib import Path
+
+def make_ext(modname, pyxfilename):
+    self_dir = Path(__file__).resolve().parent
+    minisatcs_dir = self_dir / 'minisatcs'
+    if not (minisatcs_dir / 'minisatcs_wrapper.h').exists():
+        raise RuntimeError(
+            f'minisatcs source code not found at {minisatcs_dir}')
+
+    static_lib = minisatcs_dir / 'build' / 'libminisat.a'
+    if not static_lib.exists():
+        raise RuntimeError(
+            f'minisatcs source code not compiled')
+
+    cflags = ['-O2', '-ggdb', f'-I{minisatcs_dir}', f'-I{self_dir}',
+              '-std=c++17']
+    ldflags = ['-ggdb', str(static_lib)]
+    return Extension(
+        name=modname, sources=[pyxfilename], language='c++',
+        extra_compile_args=cflags, extra_link_args=ldflags)
+
+def make_setup_args():
+    return {'script_args': ["--verbose"]}
+
+# vim: ft=python

@@ -1,0 +1,6 @@
+[submodule "eevbnn/minisatcs"]
+	path = eevbnn/minisatcs
+	url = git@github.com:jia-kai/minisatcs.git
+[submodule "eevbnn/roundingsat_repo"]
+	path = eevbnn/roundingsat_repo
+	url = https://gitlab.com/miao_research/roundingsat.git

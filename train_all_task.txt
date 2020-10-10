@@ -1,0 +1,46 @@
+Cifar10_1 cifar10-l-adv8-cbd3 --bias-hinge-coeff 5e-4 --bias-hinge-thresh 5 --input-quant 0.064 --adv-epsilon 'min(epoch/100, 1)*8/255' --adv-step 'min(epoch/50,0.9)*10+1' --checkpoint 189
+Mnist1 mnist-l-adv0.3-cbd3 --bias-hinge-coeff 5e-4 --bias-hinge-thresh 5 --input-quant 0.61 --adv-epsilon 'min(epoch/100, 1)*0.3' --adv-step 'min(epoch/50,0.9)*10+1' --checkpoint 189
+Mnist0 mnist-s-adv0.3 --input-quant 0.61 --adv-epsilon 'min(epoch/100, 1)*0.3' --adv-step 'min(epoch/50,0.9)*10+1'
+Cifar10_0 cifar10-s-adv8 --input-quant 0.064 --adv-epsilon 'min(epoch/100, 1)*8/255' --adv-step 'min(epoch/50,0.9)*10+1'
+Cifar10_1 cifar10-l-adv8-cbd2 --bias-hinge-coeff 1e-4 --bias-hinge-thresh 5 --input-quant 0.064 --adv-epsilon 'min(epoch/100, 1)*8/255' --adv-step 'min(epoch/50,0.9)*10+1' --checkpoint 189
+Mnist1 mnist-l-adv0.1-cbd3 --bias-hinge-coeff 5e-4 --bias-hinge-thresh 5 --input-quant 0.61 --adv-epsilon 'min(epoch/100, 1)*0.1' --adv-step 'min(epoch/50,0.9)*10+1' --checkpoint 189
+Cifar10_1 cifar10-l-adv2-cbd3 --bias-hinge-coeff 5e-4 --bias-hinge-thresh 5 --input-quant 0.064 --adv-epsilon 'min(epoch/100, 1)*2/255' --adv-step 'min(epoch/50,0.9)*10+1' --checkpoint 189
+MnistMLP mnist-mlp --set-global-param g_weight_decay=1e-5 --input-quant 0.1
+Mnist1 mnist-l-adv0.3-cbd0 --input-quant 0.61 --adv-epsilon 'min(epoch/100, 1)*0.3' --adv-step 'min(epoch/50,0.9)*10+1'
+Mnist1 mnist-l-adv0.3-cbd1 --bias-hinge-coeff 1e-5 --bias-hinge-thresh 5 --input-quant 0.61 --adv-epsilon 'min(epoch/100, 1)*0.3' --adv-step 'min(epoch/50,0.9)*10+1'
+Mnist1 mnist-l-adv0.3-cbd2 --bias-hinge-coeff 1e-4 --bias-hinge-thresh 5 --input-quant 0.61 --adv-epsilon 'min(epoch/100, 1)*0.3' --adv-step 'min(epoch/50,0.9)*10+1'
+Mnist0 mnist-s-advnone --input-quant 0.61
+Mnist0 mnist-s-adv0.1 --input-quant 0.61 --adv-epsilon 'min(epoch/100, 1)*0.1' --adv-step 'min(epoch/50,0.9)*10+1'
+Mnist0 mnist-s-adv0.3-hardtanh --input-quant 0.61 --adv-epsilon 'min(epoch/100, 1)*0.3' --adv-step 'min(epoch/50,0.9)*10+1' --set-global-param g_bingrad_soft_tanh_scale=None
+Cifar10_0 cifar10-s-adv2 --input-quant 0.064 --adv-epsilon 'min(epoch/100, 1)*2/255' --adv-step 'min(epoch/50,0.9)*10+1'
+Cifar10_1 cifar10-l-adv8-cbd0 --input-quant 0.064 --adv-epsilon 'min(epoch/100, 1)*8/255' --adv-step 'min(epoch/50,0.9)*10+1'
+Cifar10_1 cifar10-l-adv8-cbd1 --bias-hinge-coeff 1e-5 --bias-hinge-thresh 5 --input-quant 0.064 --adv-epsilon 'min(epoch/100, 1)*8/255' --adv-step 'min(epoch/50,0.9)*10+1'
+Mnist0 mnist-s-advnone-ternweight --input-quant 0.61 --set-global-param g_weight_binarizer=net_bin.TernaryWeightFn --set-global-param g_weight_decay=1e-5
+Mnist1 mnist-l-advnone-ternweight-cbd --input-quant 0.61 --set-global-param g_weight_binarizer=net_bin.TernaryWeightFn --set-global-param g_weight_decay=5e-5 --bias-hinge-coeff 1e-4 --bias-hinge-thresh 5
+Mnist1 mnist-l-advnone-ternweight-cbd1 --input-quant 0.61 --set-global-param g_weight_binarizer=net_bin.TernaryWeightFn --set-global-param g_weight_decay=5e-5 --bias-hinge-coeff 1e-3 --bias-hinge-thresh 5
+Mnist1 mnist-l-advnone-ternweight --input-quant 0.61 --set-global-param g_weight_binarizer=net_bin.TernaryWeightFn --set-global-param g_weight_decay=3e-7
+Mnist1 mnist-l-advnone-cbd0 --input-quant 0.61
+Mnist1 mnist-l-advnone-cbd1 --input-quant 0.61 --bias-hinge-coeff 1e-4 --bias-hinge-thresh 5
+Cifar10_0 cifar10-s-advnone --input-quant 0.064 --set-global-param g_bingrad_soft_tanh_scale=2 --set-global-param g_weight_decay=1e-6 --epoch 90
+Cifar10_0 cifar10-s-advnone-full-last-bn --input-quant 0.064 --set-global-param g_bingrad_soft_tanh_scale=2 --set-global-param g_weight_decay=1e-6 --epoch 90 --set-global-param g_use_scalar_scale_last_layer=False
+Cifar10_0 cifar10-s-advnone-no-last-bn --input-quant 0.064 --set-global-param g_bingrad_soft_tanh_scale=2 --set-global-param g_weight_decay=1e-6 --epoch 90 --set-global-param g_remove_last_bn=True
+Cifar10_0 cifar10-s-advnone-ternweight --input-quant 0.064 --set-global-param g_weight_binarizer=net_bin.TernaryWeightFn --set-global-param g_weight_decay=1.8e-5 --set-global-param g_bingrad_soft_tanh_scale=2 --epoch 90
+Cifar10_1 cifar10-l-advnone-cbd0 --input-quant 0.064 --set-global-param g_weight_decay=2.5e-6
+Cifar10_1 cifar10-l-advnone-cbd1 --input-quant 0.064 --bias-hinge-coeff 4e-5 --bias-hinge-thresh 5 --set-global-param g_weight_decay=2.5e-6
+Cifar10_1 cifar10-l-advnone-ternweight --input-quant 0.064 --set-global-param g_weight_binarizer=net_bin.TernaryWeightFn --set-global-param g_weight_decay=1e-5
+Mnist1 mnist-l-adv0.3-ternweight --input-quant 0.61 --adv-epsilon 'min(epoch/100, 1)*0.3' --adv-step 'min(epoch/50,0.9)*10+1' --set-global-param g_weight_binarizer=net_bin.TernaryWeightFn --set-global-param g_weight_decay=2e-6
+Mnist1 mnist-l-adv0.3-ternweight-cbd --input-quant 0.61 --adv-epsilon 'min(epoch/100, 1)*0.3' --adv-step 'min(epoch/50,0.9)*10+1' --set-global-param g_weight_binarizer=net_bin.TernaryWeightFn --set-global-param g_weight_decay=1e-5 --bias-hinge-coeff 1e-4 --bias-hinge-thresh 5
+Cifar10_1 cifar10-l-adv8-ternweight --input-quant 0.064 --adv-epsilon 'min(epoch/100, 1)*8/255' --adv-step 'min(epoch/50,0.9)*10+1' --set-global-param g_weight_binarizer=net_bin.TernaryWeightFn --set-global-param g_weight_decay=2e-6
+Mnist0 mnist-s-adv0.3-ternweight-wd0 --input-quant 0.61 --adv-epsilon 'min(epoch/100, 1)*0.3' --adv-step 'min(epoch/50,0.9)*10+1' --set-global-param g_weight_binarizer=net_bin.TernaryWeightFn --set-global-param g_weight_decay=1e-5
+Mnist0 mnist-s-adv0.3-ternweight-wd1 --input-quant 0.61 --adv-epsilon 'min(epoch/100, 1)*0.3' --adv-step 'min(epoch/50,0.9)*10+1' --set-global-param g_weight_binarizer=net_bin.TernaryWeightFn --set-global-param g_weight_decay=1e-4
+Cifar10_0 cifar10-s-adv8-ternweight --input-quant 0.064 --adv-epsilon 'min(epoch/100, 1)*8/255' --adv-step 'min(epoch/50,0.9)*10+1' --set-global-param g_weight_binarizer=net_bin.TernaryWeightFn --set-global-param g_weight_decay=3.5e-5
+Mnist1 mnist-l-adv0.3-cbd3-vrf --bias-hinge-coeff 5e-4 --bias-hinge-thresh 5 --input-quant 0.61 --adv-epsilon 'min(epoch/100, 1)*0.3' --adv-step 'min(epoch/50,0.9)*10+1' --verifier-mix 1 --start-epoch 190 --load $dir/mnist-l-adv0.3-cbd3/chkpoint-189.pth --wait-load
+Cifar10_1 cifar10-l-adv8-cbd3-vrf --bias-hinge-coeff 5e-4 --bias-hinge-thresh 5 --input-quant 0.064 --adv-epsilon 'min(epoch/100, 1)*8/255' --adv-step 'min(epoch/50,0.9)*10+1' --verifier-mix 1 --start-epoch 190 --load $dir/cifar10-l-adv8-cbd3/chkpoint-189.pth --wait-load
+Mnist1 mnist-l-adv0.1-cbd3-vrf --bias-hinge-coeff 5e-4 --bias-hinge-thresh 5 --input-quant 0.61 --adv-epsilon 'min(epoch/100, 1)*0.1' --adv-step 'min(epoch/50,0.9)*10+1' --verifier-mix 1 --start-epoch 190 --load $dir/mnist-l-adv0.1-cbd3/chkpoint-189.pth --wait-load
+Cifar10_1 cifar10-l-adv2-cbd3-vrf --bias-hinge-coeff 5e-4 --bias-hinge-thresh 5 --input-quant 0.064 --adv-epsilon 'min(epoch/100, 1)*2/255' --adv-step 'min(epoch/50,0.9)*10+1' --verifier-mix 1 --start-epoch 190 --load $dir/cifar10-l-adv2-cbd3/chkpoint-189.pth --wait-load
+Cifar10_1 cifar10-l-adv8-cbd3-hardtanh --bias-hinge-coeff 5e-4 --bias-hinge-thresh 5 --input-quant 0.064 --adv-epsilon 'min(epoch/100, 1)*8/255' --adv-step 'min(epoch/50,0.9)*10+1' --set-global-param g_bingrad_soft_tanh_scale=None
+Cifar10_1 cifar10-l-adv8-cbd3-tanh-noscale --bias-hinge-coeff 5e-4 --bias-hinge-thresh 5 --input-quant 0.064 --adv-epsilon 'min(epoch/100, 1)*8/255' --adv-step 'min(epoch/50,0.9)*10+1' --grad-scale-start-epoch=999
+MnistReal0 mnist-real-s --lr 1e-3
+MnistReal1 mnist-real-l --lr 1e-3
+Cifar10Real0 cifar10-real-s --lr 1e-3
+Cifar10Real1 cifar10-real-l --lr 1e-3

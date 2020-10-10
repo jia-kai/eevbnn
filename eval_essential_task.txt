@@ -1,0 +1,14 @@
+mnist-s-adv0.1 0.1
+mnist-s-adv0.3 0.3
+mnist-l-adv0.1-cbd3 0.1
+mnist-l-adv0.1-cbd3-vrf 0.1
+mnist-l-adv0.3-cbd2 0.3
+mnist-l-adv0.3-cbd3 0.3
+mnist-l-adv0.3-cbd3-vrf 0.3
+cifar10-s-adv2 $2/255
+cifar10-s-adv8 $8/255
+cifar10-l-adv2-cbd3 $2/255
+cifar10-l-adv2-cbd3-vrf $2/255
+cifar10-l-adv8-cbd2 $8/255
+cifar10-l-adv8-cbd3 $8/255
+cifar10-l-adv8-cbd3-vrf $8/255

@@ -1,0 +1,106 @@
+mnist-mlp $20/255 minisatcs
+mnist-mlp $20/255 z3 --sat z3 $SUBSET
+mnist-mlp $20/255 m22 --pysat m22 $SUBSET
+mnist-mlp $20/255 m22-cardnet --pysat m22-cn $SUBSET
+mnist-mlp $20/255 pb --sat roundingsat $SUBSET
+mnist-mlp 0.3 minisatcs
+mnist-mlp 0.3 z3 --sat z3 $SUBSET
+mnist-mlp 0.3 pb --sat roundingsat $SUBSET
+mnist-mlp 0.3 m22 --pysat m22 $SUBSET
+mnist-mlp 0.3 m22-cardnet --pysat m22-cn $SUBSET
+mnist-s-advnone 0.1
+mnist-s-advnone 0.1 m22 --pysat m22 $SUBSET
+mnist-s-advnone 0.1 z3 --sat z3 $SUBSET
+mnist-s-advnone 0.1 pb --sat roundingsat $SUBSET
+mnist-s-adv0.1 0.1
+mnist-s-adv0.1 0.2
+mnist-s-adv0.1 0.3
+mnist-s-adv0.3 0.1
+mnist-s-adv0.3 0.1 z3-check --sat z3
+mnist-s-adv0.3 0.2
+mnist-s-adv0.3 0.3
+mnist-s-adv0.3 0.3 m22 --pysat m22 $SUBSET
+mnist-s-adv0.3 0.3 m22-cardnet --pysat m22-cn $SUBSET
+mnist-s-adv0.3 0.3 z3 --sat z3 $SUBSET
+mnist-s-adv0.3 0.3 pb --sat roundingsat $SUBSET
+mnist-l-adv0.1-cbd3 0.1
+mnist-l-adv0.1-cbd3-vrf 0.1
+mnist-l-adv0.1-cbd3-vrf 0.2
+mnist-l-adv0.1-cbd3-vrf 0.3
+mnist-l-adv0.3-cbd0 0.3 $SUBSET
+mnist-l-adv0.3-cbd1 0.3 $SUBSET
+mnist-l-adv0.3-cbd2 0.3
+mnist-l-adv0.3-cbd2 0.3 minisatcs-sub $SUBSET
+mnist-l-adv0.3-cbd3 0.3
+mnist-l-adv0.3-cbd3-vrf 0.1
+mnist-l-adv0.3-cbd3-vrf 0.2
+mnist-l-adv0.3-cbd3-vrf 0.2 minisatcs-vp-z --var-pref z --disable-model-cache
+mnist-l-adv0.3-cbd3-vrf 0.2 minisatcs-vp-z-ent --var-pref z-ent --disable-model-cache
+mnist-l-adv0.3-cbd3-vrf 0.2 minisatcs-vp-none --var-pref none
+mnist-l-adv0.3-cbd3-vrf 0.2 minisatcs-vp-first --var-pref first --disable-model-cache
+mnist-l-adv0.3-cbd3-vrf 0.2 minisatcs-vp-first-sp --var-pref first-sp --disable-fast-tensor-arith --disable-model-cache
+mnist-l-adv0.3-cbd3-vrf 0.3
+mnist-l-adv0.3-cbd3-vrf 0.3 ensemble --ensemble $dir/mnist-s-adv0.3/last.pth
+cifar10-s-advnone $2/255
+cifar10-s-advnone $2/255 m22 --pysat m22 $SUBSET
+cifar10-s-advnone $2/255 z3 --sat z3 $SUBSET
+cifar10-s-advnone $2/255 pb --sat roundingsat $SUBSET
+cifar10-s-adv2 $2/255
+cifar10-s-adv2 $5/255
+cifar10-s-adv2 $8/255
+cifar10-s-adv8 $2/255
+cifar10-s-adv8 $5/255
+cifar10-s-adv8 $8/255
+cifar10-s-adv8 $8/255 m22 --pysat m22 $SUBSET
+cifar10-s-adv8 $8/255 z3 --sat z3 $SUBSET
+cifar10-s-adv8 $8/255 pb --sat roundingsat $SUBSET
+cifar10-l-adv2-cbd3 $2/255
+cifar10-l-adv2-cbd3-vrf $2/255
+cifar10-l-adv2-cbd3-vrf $5/255
+cifar10-l-adv2-cbd3-vrf $8/255
+cifar10-l-adv8-cbd0 $8/255 $SUBSET
+cifar10-l-adv8-cbd0 $8/255 pb $SUBSET --sat roundingsat
+cifar10-l-adv8-cbd1 $8/255
+cifar10-l-adv8-cbd2 $8/255
+cifar10-l-adv8-cbd3 $8/255
+cifar10-l-adv8-cbd3-vrf $2/255
+cifar10-l-adv8-cbd3-vrf $5/255
+cifar10-l-adv8-cbd3-vrf $8/255
+cifar10-l-adv8-cbd3-tanh-noscale $8/255
+cifar10-l-adv8-cbd3-hardtanh $8/255
+mnist-s-advnone-ternweight 0.1 $SUBSET
+mnist-s-adv0.3-ternweight-wd0 0.3 $SUBSET
+mnist-s-adv0.3-ternweight-wd1 0.3
+mnist-l-advnone-cbd0 0.1 $SUBSET
+mnist-l-advnone-ternweight-cbd 0.1 $SUBSET
+mnist-l-advnone-ternweight-cbd1 0.1 $SUBSET
+mnist-l-advnone-ternweight 0.1 $SUBSET
+mnist-l-advnone-cbd1 0.1 minisatcs-sub $SUBSET
+mnist-l-advnone-cbd1 0.1 m22 --pysat m22 $SUBSET
+mnist-l-advnone-cbd1 0.1 z3 --sat z3 $SUBSET
+mnist-l-advnone-cbd1 0.1 pb --sat roundingsat $SUBSET
+mnist-l-adv0.3-ternweight 0.3 $SUBSET
+mnist-l-adv0.3-ternweight-cbd 0.3 $SUBSET
+mnist-l-adv0.3-ternweight-cbd 0.3 m22 --pysat m22 $SUBSET
+mnist-l-adv0.3-ternweight-cbd 0.3 z3 --sat z3 $SUBSET
+mnist-l-adv0.3-ternweight-cbd 0.3 pb --sat roundingsat $SUBSET
+cifar10-s-advnone-ternweight $2/255 $SUBSET
+cifar10-s-advnone-ternweight $2/255 m22 --pysat m22 $SUBSET
+cifar10-s-advnone-ternweight $2/255 z3 --sat z3 $SUBSET
+cifar10-s-advnone-ternweight $2/255 pb --sat roundingsat $SUBSET
+cifar10-s-adv8-ternweight $8/255
+cifar10-l-advnone-cbd0 $2/255 $SUBSET
+cifar10-l-advnone-ternweight $2/255 $SUBSET
+cifar10-l-advnone-cbd1 $2/255 minisatcs-sub $SUBSET
+cifar10-l-advnone-cbd1 $2/255 m22 $SUBSET --pysat m22
+cifar10-l-advnone-cbd1 $2/255 z3 $SUBSET --sat z3
+cifar10-l-advnone-cbd1 $2/255 pb $SUBSET --sat roundingsat
+cifar10-l-adv8-ternweight $8/255 $SUBSET
+cifar10-l-adv8-ternweight $8/255 pb $SUBSET --sat roundingsat
+mnist-l-adv0.3-cbd3 0.3 m22 --pysat m22 $SUBSET
+mnist-l-adv0.3-cbd3 0.3 m22-cardnet --pysat m22-cn $SUBSET
+mnist-l-adv0.3-cbd3 0.3 z3 --sat z3 $SUBSET
+mnist-l-adv0.3-cbd3 0.3 pb --sat roundingsat $SUBSET
+cifar10-l-adv8-cbd2 $8/255 m22 --pysat m22 $SUBSET
+cifar10-l-adv8-cbd2 $8/255 z3 --sat z3 $SUBSET
+cifar10-l-adv8-cbd2 $8/255 pb --sat roundingsat $SUBSET

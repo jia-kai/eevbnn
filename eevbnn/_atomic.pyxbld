@@ -1,0 +1,22 @@
+# -*- coding: utf-8 -*-
+
+import numpy as np
+
+from distutils.extension import Extension
+from pathlib import Path
+
+def make_ext(modname, pyxfilename):
+    cflags = [
+        '-DNPY_NO_DEPRECATED_API=NPY_1_7_API_VERSION',
+        '-O2', '-ggdb', '-I{}'.format(np.get_include()),
+        '-I{}'.format(Path(__file__).resolve().parent),
+    ]
+    return Extension(
+        name=modname, sources=[pyxfilename], language='c++',
+        extra_compile_args=cflags)
+
+def make_setup_args():
+    return {}
+    # return {'script_args': ["--verbose"]}
+
+# vim: ft=python
