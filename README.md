@@ -1,8 +1,15 @@
 # Efficient Exact Verification of Binarized Neural Networks
 
 This repository is the official implementation of
-[EEV](https://arxiv.org/abs/2005.03597), a system for efficient, complete, and
-sound verification of binarized neural networks.
+[EEV](https://arxiv.org/abs/2005.03597), a system for efficient and exact
+(complete and sound) verification of binarized neural networks.
+
+Verifiers that claim to be exact for real-valued neural networks are
+fundamentally incorrect due to floating point errors, which can be [exploited to
+invalidate their verification results in practice](https://github.com/jia-kai/realadv).
+We present the **first** exact verification results with **guaranteed
+correctness** for adversarial robustness of neural networks on MNIST and
+CIFAR10.
 
 Our main contributions:
 
@@ -68,6 +75,8 @@ ModelVerifier` in [eevbnn/eval_bin.py](eevbnn/eval_bin.py).  The pretrained
 models can be downloaded [here](https://www.dropbox.com/s/xfpiw7o3r841acr/output-0527.tar.xz?dl=0).
 To run the verifier:
 ```sh
+# Download and extract the pretrained models
+
 # verifying with MiniSatCS and eps=0.08
 python -m eevbnn eval_bin -e 0.08 output-0527/mnist-mlp/last.pth
 
@@ -89,6 +98,10 @@ To reproduce the results in the paper:
 3. Run `./attack_all_parallel.sh workdir` run the PGD attack.
 4. Run `./gen_paper_fig.py workdir workdir/fig` to generate the figures, tables,
    and numbers reported in the paper.
+
+Note that the `train_all_parallel.sh` and `eval_all_parallel.sh` scripts are
+designed to be interruptible. Running the scripts again with the same `workdir`
+would continue from previous checkpoints.
 
 
 # Citation

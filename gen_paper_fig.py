@@ -578,11 +578,11 @@ class Experiments:
             fout.write(latex)
 
     def gen_fig_cmp_minisat(self):
-        METHODS = ['Z3 (sub40)',
-                   'MiniSat-seqcnt (sub40)', 'MiniSat-cardnet (sub40)',
-                   'RoundingSat (sub40)', 'Ours: MiniSatCS (sub40)',
-                   'Ours: MiniSatCS (full)',
-                   'Narodytska et al. (sub100)']
+        METHODS = [
+            'Ours: MiniSatCS (full)', 'Ours: MiniSatCS (sub40)',
+            'MiniSat-seqcnt (sub40)', 'MiniSat-cardnet (sub40)',
+            'Z3 (sub40)', 'RoundingSat (sub40)', 'Narodytska et al. (sub100)'
+        ]
         TIME_narodytska2020in = FloatValue(5.1, 3)
         EPS_DISP = ['20/255', '0.3']
         EPS_FILE = [ADV20_255, '0.3']
@@ -604,16 +604,16 @@ class Experiments:
             xmin = []
             xmax = []
             for meth_i, meth in enumerate(
-                    ['z3', 'm22', 'm22-cardnet', 'pb',
-                     'minisatcs', 'minisatcs']):
+                    ['minisatcs', 'minisatcs',
+                     'm22', 'm22-cardnet', 'z3', 'pb']):
                 solver_st = exp.solver_stats(eps, meth,
-                                             use_subset=(meth_i != NR_CMP-1))
+                                             use_subset=(meth_i != 0))
                 xmean.append(solver_st.solve_time.vnum)
                 xmin.append(solver_st.solve_time_min.vnum)
                 xmax.append(solver_st.solve_time_max.vnum)
                 xmid.append(solver_st.solve_time_mid.vnum)
 
-                if not self.args.add_unfinished and meth_i != NR_CMP-1:
+                if not self.args.add_unfinished and meth_i != 0:
                     if solver_test_size is None:
                         solver_test_size = solver_st.num
                     assert solver_test_size == solver_st.num, (
@@ -621,9 +621,9 @@ class Experiments:
 
             ycoord = np.arange(NR_CMP, dtype=np.float32)
             if eps_i == 0:
-                ycoord -= 0.1
+                ycoord -= 0.15
             else:
-                ycoord += 0.1
+                ycoord += 0.15
 
             xmean, xmin, xmax = map(np.array, [xmean, xmin, xmax])
 
@@ -819,6 +819,25 @@ class Experiments:
         ax0.set_yscale('log')
         ax0.set_ylim(min(ys) / 4, max(ys) * 4)
         ax0.grid(which='major', axis='y')
+        tx0 = [None, None]
+        for i in range(2):
+            dx = (xs[2+i]-xs[i])*0.03
+            dy = np.exp((np.log(ys[2+i]) - np.log(ys[i]))*0.03)
+            ax0.annotate(
+                '',
+                xy=(xs[i]+dx, ys[i]*dy), xycoords='data',
+                xytext=(xs[2+i]-dx, ys[2+i]/dy), textcoords='data',
+                arrowprops=dict(
+                    arrowstyle='fancy',
+                )
+            )
+            tx0[i] = ax0.text(
+                (xs[0+i]+xs[2+i]) / 2 - 0.1,
+                np.sqrt(ys[0+i]*ys[2+i]) * 1.5,
+                f"speedup: {ys[2+i]/ys[0+i]:.2f}x",
+                ha='center', va='center',
+                size='large',
+            )
 
         colors = ['#ffeda0', '#feb24c', '#f03b20']
         ys0 = make_y(lambda x: x.robust_prob.vnum, 'prov_acc', 100)
@@ -833,13 +852,24 @@ class Experiments:
                 color=colors[2])
         ax1.set_ylabel('Accuracy (%)')
         ax1.grid(which='major', axis='y')
-        ax1.legend(loc='upper left', fancybox=True, framealpha=0.9,
-                   borderpad=1, frameon=True)
         ax1.set_ylim(0, 55)
+        handles, labels = ax1.get_legend_handles_labels()
+        _, handles, labels = zip(*sorted(zip([1, 0, 2],
+                                             handles, labels)))
+        ax1.legend(handles, labels,
+                   loc='upper left', fancybox=True, framealpha=0.9,
+                   borderpad=1, frameon=True)
 
         fig.suptitle(r'Comparing Verification Performance on CIFAR10 '
                      r'with $\epsilon=\frac{8}{255}$ Timeout=120s')
         fig.tight_layout(rect=[0, 0.03, 1, 0.95])
+
+        for i in range(2):
+            sp1 = ax0.transData.transform_point(np.array([xs[i], ys[i]]))
+            sp2 = ax0.transData.transform_point(np.array([xs[2+i], ys[2+i]]))
+            tx0[i].set_rotation(np.degrees(np.arctan2(
+                sp2[1] - sp1[1], sp2[0] - sp1[0])))
+
         for ext in ['png', 'pdf']:
             fig.savefig(str(self.out_dir / f'fig-cmp-singledset.{ext}'),
                         metadata={'CreationDate': None})
@@ -1487,6 +1517,8 @@ def main():
     parser.add_argument(
         '--data', default=default_dataset_root(),
         help='dir for training data')
+    parser.add_argument('-f', '--filter',
+                        help='regular expressions to filter the generators')
     args = parser.parse_args()
 
     ensure_dir(args.out_dir)
@@ -1496,12 +1528,14 @@ def main():
     exp = Experiments(args)
     for i in dir(exp):
         if i.startswith('gen_'):
+            if args.filter and not re.search(args.filter, i):
+                continue
             print(f'executing {i}() ...')
             getattr(exp, i)()
     exp.write_latex_defs()
     print(f'all tested cases: {g_possible_tested_cases}')
     if not args.add_unfinished:
-        assert len(g_possible_tested_cases) == 2
+        assert len(g_possible_tested_cases) == 2 or args.filter
 
     exp.print_unused_experiments()
 
