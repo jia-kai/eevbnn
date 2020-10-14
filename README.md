@@ -72,7 +72,7 @@ main functions and can be executed from command line, such as `python -m eevbnn
 train_bin` for training or `python -m eevbnn eval_bin` for verification. If you
 need to verify your own BNN models using EEV, please have a look at `class
 ModelVerifier` in [eevbnn/eval_bin.py](eevbnn/eval_bin.py).  The pretrained
-models can be downloaded [here](https://www.dropbox.com/s/xfpiw7o3r841acr/output-0527.tar.xz?dl=0).
+models can be downloaded [here](https://www.dropbox.com/s/w40lpvf87tvres4/output-0527.tar.xz?dl=0).
 To run the verifier:
 ```sh
 # Download and extract the pretrained models

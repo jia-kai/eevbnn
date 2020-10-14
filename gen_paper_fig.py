@@ -1457,11 +1457,14 @@ class Experiments:
                          'cifar10-l-adv8-cbd3',
                          'cifar10-l-adv8-cbd3-vrf']))
 
-        idx_row = ['Natural Test Accuracy', 'Verifiable Accuracy']
+        idx_row = ['Natural Test Accuracy', 'PGD Accuracy',
+                   'Verifiable Accuracy']
         idx_col = ['hard tanh', 'tanh', 'adaptive', 'adaptive + verifier adv']
         data = np.empty((len(idx_row), len(idx_col)), dtype=object)
         data[0] = [i.test_acc() for i in exps]
-        data[1] = [i.solver_stats(ADV8_255).robust_prob for i in exps]
+        data[1, 0] = exps[0].pgd_acc_hardtanh()[ADV8_255]
+        data[1, 1:] = [i.pgd_acc()[ADV8_255] for i in exps[1:]]
+        data[2] = [i.solver_stats(ADV8_255).robust_prob for i in exps]
         df = pd.DataFrame(data, index=idx_row, columns=idx_col)
         latex: str = df.to_latex(escape=False, column_format='lrrrr')
         with self._open_outfile('table-cmp-tanh.tex') as fout:
