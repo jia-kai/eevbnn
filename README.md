@@ -4,12 +4,17 @@ This repository is the official implementation of
 [EEV](https://arxiv.org/abs/2005.03597), a system for efficient and exact
 (complete and sound) verification of binarized neural networks.
 
-Verifiers that claim to be exact for real-valued neural networks are
-fundamentally incorrect due to floating point errors, which can be [exploited to
-invalidate their verification results in practice](https://github.com/jia-kai/realadv).
+Verifiers that claim to be exact for real-valued neural networks face two
+fundamental challenges due to the complexity of floating point arithmetic:
+1. They are slow.
+2. They provide no correctness guarantee due to floating point errors, which can
+   be [exploited to construct adversarial examples for networks that are claimed
+   to be robust by an exact verifier](https://github.com/jia-kai/realadv).
+
 We present the **first** exact verification results with **guaranteed
 correctness** for adversarial robustness of neural networks on MNIST and
-CIFAR10.
+CIFAR10, which is also **several orders of magnitude faster** compared to
+previous verification results.
 
 Our main contributions:
 
@@ -26,7 +31,7 @@ Our main contributions:
 Comparing with [a state-of-the-art real-valued
 verifier](https://github.com/MadryLab/relu_stable) on CIFAR10:
 
-![comparison](img/fig-cmp-singledset.png)
+![comparison](img/fig-cmp-singledset-annot.png)
 
 
 ## Building
@@ -106,10 +111,15 @@ would continue from previous checkpoints.
 
 # Citation
 ```txt
-@article{jia2020efficient,
-  title={Efficient Exact Verification of Binarized Neural Networks},
-  author={Jia, Kai and Rinard, Martin},
-  journal={arXiv preprint arXiv:2005.03597},
-  year={2020}
+@inproceedings{jia2020efficient,
+ author = {Jia, Kai and Rinard, Martin},
+ booktitle = {Advances in Neural Information Processing Systems},
+ editor = {H. Larochelle and M. Ranzato and R. Hadsell and M. F. Balcan and H. Lin},
+ pages = {1782--1795},
+ publisher = {Curran Associates, Inc.},
+ title = {Efficient Exact Verification of Binarized Neural Networks},
+ url = {https://proceedings.neurips.cc/paper/2020/file/1385974ed5904a438616ff7bdb3f7439-Paper.pdf},
+ volume = {33},
+ year = {2020}
 }
 ```

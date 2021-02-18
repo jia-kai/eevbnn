@@ -579,16 +579,16 @@ class Experiments:
 
     def gen_fig_cmp_minisat(self):
         METHODS = [
-            'Ours: MiniSatCS (full)', 'Ours: MiniSatCS (sub40)',
-            'MiniSat-seqcnt (sub40)', 'MiniSat-cardnet (sub40)',
-            'Z3 (sub40)', 'RoundingSat (sub40)', 'Narodytska et al. (sub100)'
+            'Ours:\nMiniSatCS\n(full)', 'Ours:\nMiniSatCS\n(sub40)',
+            'MiniSat\nseqcnt\n(sub40)', 'MiniSat\ncardnet\n(sub40)',
+            'Z3\n(sub40)', 'RoundingSat\n(sub40)', 'Narodytska et al.\n(sub100)'
         ]
         TIME_narodytska2020in = FloatValue(5.1, 3)
         EPS_DISP = ['20/255', '0.3']
         EPS_FILE = [ADV20_255, '0.3']
 
         fig_h, ax_h = plt.subplots(figsize=(8, 3))
-        fig_v, ax_v = plt.subplots(figsize=(9, 6.5))
+        fig_v, ax_v = plt.subplots(figsize=(9.5, 5.5))
 
         solver_test_size = None
         exp = self['mnist-mlp']
@@ -645,9 +645,9 @@ class Experiments:
         ax_v.plot([NR_CMP], [TIME_narodytska2020in.vnum],
                   marker='o', color=colors[0])
 
-        xlim = (xmin_min * 0.9, 1e4)
+        xlim = (xmin_min * 0.9, 5e3)
         ylim = (-0.49, 4.49)
-        ax_h.set_xlabel('Time (seconds) in Log Scale')
+        ax_h.set_xlabel('Solve Time (seconds) in Log Scale')
         ax_h.set_xscale('log')
         ax_h.set_xlim(xlim)
         ax_h.set_yticks(np.arange(len(METHODS)))
@@ -657,11 +657,11 @@ class Experiments:
         ax_h.grid(axis='y', which='minor')
         ax_h.grid(axis='x', which='major')
 
-        ax_v.set_ylabel('Time (seconds) in Log Scale')
+        ax_v.set_ylabel('Solve Time (seconds) in Log Scale')
         ax_v.set_yscale('log')
         ax_v.set_ylim(xlim)
         ax_v.set_xticks(np.arange(len(METHODS)))
-        ax_v.set_xticklabels(METHODS, rotation=45)
+        ax_v.set_xticklabels(METHODS)
         ax_v.set_xlim(ylim)
         ax_v.set_xticks(np.arange(len(METHODS)) + 0.5, minor=True)
         ax_v.grid(axis='x', which='minor')
@@ -674,7 +674,7 @@ class Experiments:
             ax.plot([], [], marker='^', ls='none', label='median',
                     color='black')
             ax.legend(loc='best', fancybox=True, framealpha=0.9,
-                      borderpad=1, frameon=True)
+                      borderpad=1, frameon=True, fontsize=13)
 
 
         fig_h.tight_layout()
@@ -785,6 +785,53 @@ class Experiments:
                     metadata={'CreationDate': None})
 
     def gen_cmp_singledset(self):
+        self._do_gen_cmp_singledset(True)
+        self._do_gen_cmp_singledset(False)
+        self._do_gen_cmp_singledset_sep()
+
+    def _do_gen_cmp_singledset_sep(self):
+        fig0, ax0 = plt.subplots(figsize=(5.6, 4.3))
+        fig1, ax1 = plt.subplots(figsize=(5.6, 6.3))
+        self._plot_cmp_singledset(ax0, ax1, False, 15, 15)
+        ax1.set_ylim(10, 50)
+
+        fig0.suptitle('Comparing Verification Solving Time on CIFAR10\n'
+                      r'with $\epsilon=8/255$ Timeout=120s',
+                     fontsize=15)
+        fig1.suptitle('Comparing Verifiable Accuracy on CIFAR10\n'
+                      r'with $\epsilon=8/255$ Timeout=120s',
+                     fontsize=15)
+
+        for ext in ['png', 'pdf', 'svg']:
+            metadata = {}
+            if ext != 'svg':
+                metadata['CreationDate'] = None
+            fig0.savefig(str(self.out_dir / f'fig-cmp-singledset-sep0.{ext}'),
+                         metadata=metadata)
+            fig1.savefig(str(self.out_dir / f'fig-cmp-singledset-sep1.{ext}'),
+                         metadata=metadata)
+
+    def _do_gen_cmp_singledset(self, annot_speedup):
+        fig, (ax0, ax1) = plt.subplots(ncols=2, figsize=(10, 5))
+
+        postfix = self._plot_cmp_singledset(ax0, ax1, annot_speedup, 15, 14)
+
+        fig.suptitle(r'Comparing Verification Performance on CIFAR10 '
+                     r'with $\epsilon=\frac{8}{255}$ Timeout=120s',
+                     fontsize=15)
+        fig.tight_layout()
+
+        postfix()
+
+        for ext in ['png', 'pdf']:
+            a = ''
+            if annot_speedup:
+                a += '-annot'
+            fig.savefig(str(self.out_dir / f'fig-cmp-singledset{a}.{ext}'),
+                        metadata={'CreationDate': None})
+
+    def _plot_cmp_singledset(self, ax0, ax1, annot_speedup,
+                             fsize_tick, fsize_legend):
         xiao_small, xiao_large = self._make_refdata_xiao()
         eev_se = self['cifar10-s-adv8']
         eev_le = self[f'cifar10-l-adv8-cbd{CHOSEN_CBD[1]}']
@@ -792,14 +839,13 @@ class Experiments:
         eev_l = eev_le.solver_stats(ADV8_255)
 
         x_labels = [
-            'BNN small', 'BNN large',
-            'Real-valued small', 'Real-valued large'
+            'Small\nBNN', 'Small\nFP32 NN',
+            'Large\nBNN', 'Large\nFP32 NN'
         ]
-        fig, (ax0, ax1) = plt.subplots(ncols=2, figsize=(10, 5))
 
         for i in ax0, ax1:
             i.set_xticks(np.arange(len(x_labels)))
-            i.set_xticklabels(x_labels, rotation=45)
+            i.set_xticklabels(x_labels, fontsize=fsize_tick)
 
         xs = np.arange(len(x_labels))
         def make_y(exeev, xkey, k=1, use_solver=True):
@@ -808,36 +854,51 @@ class Experiments:
             else:
                 eev = [eev_se, eev_le]
             return [i * k for i in (
-                exeev(eev[0]), exeev(eev[1]),
-                xiao_small[xkey][3], xiao_large[xkey][3])]
+                exeev(eev[0]), xiao_small[xkey][3],
+                exeev(eev[1]), xiao_large[xkey][3])]
 
 
         ys = make_y(lambda x: x.solve_time.vnum, 'prov_time')
-        ax0.scatter(xs[:2], ys[:2], marker='*', color='green', s=130)
-        ax0.scatter(xs[2:], ys[2:], color='black', s=50)
-        ax0.set_ylabel('Mean Solve Time (seconds) in Log Scale')
+        if annot_speedup:
+            ax0.scatter(xs[::2], ys[::2], marker='*', color='green', s=260)
+            ax0.scatter(xs[1::2], ys[1::2], color='black', s=100)
+        else:
+            ax0.bar(xs[::2], ys[::2], color='#0496ff', width=0.6,
+                    label='Ours: EEV')
+            ax0.bar(xs[1::2], ys[1::2], color='#006ba6', width=0.6,
+                    label='Xiao et al. 2019')
+        ax0.set_ylabel('Mean Solve Time (seconds) in Log Scale',
+                       fontsize=fsize_tick)
         ax0.set_yscale('log')
+        ax0.set_xlim(-0.5, 3.5)
         ax0.set_ylim(min(ys) / 4, max(ys) * 4)
         ax0.grid(which='major', axis='y')
         tx0 = [None, None]
-        for i in range(2):
-            dx = (xs[2+i]-xs[i])*0.03
-            dy = np.exp((np.log(ys[2+i]) - np.log(ys[i]))*0.03)
-            ax0.annotate(
-                '',
-                xy=(xs[i]+dx, ys[i]*dy), xycoords='data',
-                xytext=(xs[2+i]-dx, ys[2+i]/dy), textcoords='data',
-                arrowprops=dict(
-                    arrowstyle='fancy',
+        if annot_speedup:
+            for i in range(2):
+                i0 = i*2
+                i1 = i*2 + 1
+                dx = (xs[i1]-xs[i0])*0.03
+                dy = np.exp((np.log(ys[i1]) - np.log(ys[i0]))*0.03)
+                ax0.annotate(
+                    '',
+                    xy=(xs[i0]+dx, ys[i0]*dy), xycoords='data',
+                    xytext=(xs[i1]-dx, ys[i1]/dy), textcoords='data',
+                    arrowprops=dict(
+                        arrowstyle='fancy',
+                    )
                 )
-            )
-            tx0[i] = ax0.text(
-                (xs[0+i]+xs[2+i]) / 2 - 0.1,
-                np.sqrt(ys[0+i]*ys[2+i]) * 1.5,
-                f"speedup: {ys[2+i]/ys[0+i]:.2f}x",
-                ha='center', va='center',
-                size='large',
-            )
+                tx0[i] = ax0.text(
+                    (xs[i0]+xs[i1]) / 2 - 0.1,
+                    np.sqrt(ys[i0]*ys[i1]) * 1.5,
+                    f"speedup: {ys[i1]/ys[i0]:.2f}x",
+                    ha='center', va='center',
+                    size='large',
+                )
+        else:
+            ax0.set_ylim(min(ys) / 1.5, max(ys) * 5)
+            ax0.legend(loc='best', fancybox=True, frameon=True,
+                       fontsize=fsize_legend, ncol=2)
 
         colors = ['#ffeda0', '#feb24c', '#f03b20']
         ys0 = make_y(lambda x: x.robust_prob.vnum, 'prov_acc', 100)
@@ -850,29 +911,27 @@ class Experiments:
                 color=colors[1])
         ax1.bar(xs, ys1, bottom=ys0, label='Timeout', width=0.6,
                 color=colors[2])
-        ax1.set_ylabel('Accuracy (%)')
+        ax1.set_ylabel('Accuracy (%)', fontsize=fsize_tick)
         ax1.grid(which='major', axis='y')
         ax1.set_ylim(0, 55)
         handles, labels = ax1.get_legend_handles_labels()
         _, handles, labels = zip(*sorted(zip([1, 0, 2],
                                              handles, labels)))
         ax1.legend(handles, labels,
-                   loc='upper left', fancybox=True, framealpha=0.9,
-                   borderpad=1, frameon=True)
+                   loc='upper left', fancybox=True, frameon=True,
+                   fontsize=fsize_legend)
 
-        fig.suptitle(r'Comparing Verification Performance on CIFAR10 '
-                     r'with $\epsilon=\frac{8}{255}$ Timeout=120s')
-        fig.tight_layout(rect=[0, 0.03, 1, 0.95])
+        def postfix():
+            if annot_speedup:
+                for i in range(2):
+                    sp1 = ax0.transData.transform_point(np.array([
+                        xs[i*2], ys[i*2]]))
+                    sp2 = ax0.transData.transform_point(np.array([
+                        xs[i*2+1], ys[i*2+1]]))
+                    tx0[i].set_rotation(np.degrees(np.arctan2(
+                        sp2[1] - sp1[1], sp2[0] - sp1[0])))
 
-        for i in range(2):
-            sp1 = ax0.transData.transform_point(np.array([xs[i], ys[i]]))
-            sp2 = ax0.transData.transform_point(np.array([xs[2+i], ys[2+i]]))
-            tx0[i].set_rotation(np.degrees(np.arctan2(
-                sp2[1] - sp1[1], sp2[0] - sp1[0])))
-
-        for ext in ['png', 'pdf']:
-            fig.savefig(str(self.out_dir / f'fig-cmp-singledset.{ext}'),
-                        metadata={'CreationDate': None})
+        return postfix
 
     def gen_table_summary(self):
         xiao_data_small, xiao_data_large = self._make_refdata_xiao()
