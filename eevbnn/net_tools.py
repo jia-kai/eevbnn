@@ -54,7 +54,7 @@ class OnlineMean:
     def get(self):
         return self._acc
 
-def callib_bn(args, net, device):
+def calib_bn(args, net, device):
     def update_bn_stat(ftr, bn, bn_idx):
         ref_batch = None
         reshape_brd = None
@@ -104,16 +104,16 @@ def callib_bn(args, net, device):
                     update_bn_stat(net.features[:idx], layer, idx)
 
 
-def callib_bn_main(args, net, device):
+def calib_bn_main(args, net, device):
     eval_cbd_stats(args, net, device)
-    callib_bn(args, net, device)
+    calib_bn(args, net, device)
     eval_cbd_stats(args, net, device)
     if args.output:
         net.save_to_file(args.output)
 
 FN_MAP = {
     'eval_cbd': eval_cbd_stats,
-    'calc_bn': callib_bn_main,
+    'calc_bn': calib_bn_main,
 }
 
 def main():

@@ -2,7 +2,7 @@ from .utils import (ensure_dir, get_nr_correct, default_dataset_root,
                     sqr_hinge_loss, torch_as_npy, ensure_training_state)
 from .attack_impl import pgd_batch, loss_fn_map as pgd_loss_fn_map
 from .mp_verifier_attack import VerifierAdvBatchFinder
-from .net_tools import callib_bn
+from .net_tools import calib_bn
 from . import net_bin
 
 import torch
@@ -361,7 +361,7 @@ class TrainingLoop:
         if self._model_chooser.enabled(epoch):
             pre_bn_acc, _ = self._eval_model_on_test(record_avg=False)
             pre_bn_acc = f' pre_bn_acc={pre_bn_acc*100:.2f}%'
-            callib_bn(self._args, self._net, self._device)
+            calib_bn(self._args, self._net, self._device)
         else:
             pre_bn_acc = ''
 

@@ -45,9 +45,16 @@ pip install --upgrade pip
 pip install tqdm torch torchvision cython opencv-python 'python-sat[pblib,aiger]'
 ```
 
+If the newest libraries do not work with the code, you can try installing the
+versions that we have tested with:
+```sh
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
 [MiniSatCS](https://github.com/jia-kai/minisatcs) is the SAT solver proposed in
-this work. It is hosted in another github repository. Please initialize all the
-submodules:
+this work. It is hosted in another github repository. Please first initialize
+all the submodules:
 ```sh
 git submodule update --init --recursive
 ```

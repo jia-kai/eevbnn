@@ -59,7 +59,8 @@ class CwAttackLoss(XentAttackLoss):
 
         mask = self._target_mask
         correct_score = (output * mask).sum(dim=1)
-        wrong_score = (output * (1 - mask)).max(dim=1).values
+        thr = (output.max() - output.min()).detach_() + 1
+        wrong_score = (output * (1 - mask) - thr * mask).max(dim=1).values
         return -F.relu(correct_score - wrong_score + 1e-3)
 
 loss_fn_map = {

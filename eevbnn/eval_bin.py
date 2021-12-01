@@ -5,7 +5,6 @@ from .utils import (torch_as_npy, ModelHelper, default_dataset_root, ensure_dir,
                     iter_prod_range)
 from .satenv import BoolTensor, QuantizedInputRangeTensor, SolveResult
 
-import cv2
 import numpy as np
 import torch
 import torch.nn as nn
@@ -668,6 +667,7 @@ class ModelVerifier:
                         and class_get == class_get_uniq), (
                             f'{score_check=} {err=}')
             if args.show_adv:
+                import cv2
                 cv2.imshow('orig', npy_chw_f32_to_cv2_uint8(inp))
                 cv2.imshow('adv', npy_chw_f32_to_cv2_uint8(inp_adv))
                 if chr(cv2.waitKey(-1) & 0xFF) == 'q':
