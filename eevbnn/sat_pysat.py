@@ -48,7 +48,8 @@ class MinisatCsImporter:
     def get(cls):
         if cls.Solver is None:
             with setup_pyx_import():
-                from ._minisatcs import Solver, ClauseRecorder
+                from ._minisatcs import Solver, ClauseRecorder, module_init
+            module_init()
             cls.Solver = Solver
             cls.ClauseRecorder = ClauseRecorder
         return cls

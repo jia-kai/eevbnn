@@ -3,22 +3,32 @@
 
 from libcpp.vector cimport vector as cpp_vector
 from libcpp cimport bool
+from cpython.ref cimport PyObject
 
 import threading
 
+class MinisatCsError(RuntimeError):
+    """error class for MinisatCS (we currently do not differentiate error types)
+    """
+    # see https://stackoverflow.com/questions/10684983/handling-custom-c-exceptions-in-cython
+
+cdef extern from "_minisatcs_err.h":
+    cdef void raise_py_error_setup(PyObject*)
+    cdef void raise_py_error()
+
 cdef extern from "minisatcs_wrapper.h":
     cdef cppclass WrappedMinisatSolver:
-        void new_clause_prepare() except+
-        void new_clause_add_lit(int lit) except+
-        void new_clause_commit() except+
-        void new_clause_commit_leq(int bound, int dst) except+
-        void new_clause_commit_geq(int bound, int dst) except+
-        void set_var_preference(int x, int p) except+
-        void set_var_name(int x, const char*) except+
-        int solve_with_signal(bool setup, double timeout) nogil except+
-        bool previous_timeout() except+
-        cpp_vector[int] get_model() except+
-        void set_recorder(MinisatClauseRecorder*) except+
+        void new_clause_prepare() except +raise_py_error
+        void new_clause_add_lit(int lit) except +raise_py_error
+        void new_clause_commit() except +raise_py_error
+        void new_clause_commit_leq(int bound, int dst) except +raise_py_error
+        void new_clause_commit_geq(int bound, int dst) except +raise_py_error
+        void set_var_preference(int x, int p) except +raise_py_error
+        void set_var_name(int x, const char*) except +raise_py_error
+        int solve_with_signal(bool setup, double timeout) nogil except +raise_py_error
+        bool previous_timeout() except +raise_py_error
+        cpp_vector[int] get_model() except +raise_py_error
+        void set_recorder(MinisatClauseRecorder*) except +raise_py_error
 
         int verbosity
         int phase_saving
@@ -26,7 +36,7 @@ cdef extern from "minisatcs_wrapper.h":
 
     cdef cppclass MinisatClauseRecorder:
         int nr_var()
-        void replay(WrappedMinisatSolver&) nogil except+
+        void replay(WrappedMinisatSolver&) nogil except +raise_py_error
 
 
 cdef class ClauseRecorder:
@@ -135,3 +145,7 @@ cdef class ScopedClauseRecorder:
         assert self._entered
         self._entered = False
         self._solver.set_recorder(NULL)
+
+
+def module_init():
+    raise_py_error_setup(<PyObject*>MinisatCsError)
